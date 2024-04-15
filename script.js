@@ -9,7 +9,7 @@ const progressContainer = document.getElementById('progress-container');
 const progress = document.getElementById('progress');
 const currentTimeEl = document.getElementById('current-time');
 const durationEl = document.getElementById('duration');
-
+let totalDurationSeconds = 0;
 // Music
 const songs = [
     {
@@ -114,7 +114,8 @@ updateProgressBar = (e)=>{
         if(durationSeconds){
             durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
         }
-
+        totalDurationSeconds = (durationMinutes*60) + durationSeconds;
+        
         // Calculate display for current
         const currentMinutes  = Math.floor(currentTime / 60);
         let currentSeconds = Math.floor(currentTime % 60);
@@ -124,7 +125,14 @@ updateProgressBar = (e)=>{
         currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
     }
 }
+
+setProgressBar = (e)=> {
+    const width = progressContainer.offsetWidth;
+    const clickX = e.offsetX;
+    music.currentTime = (clickX / width) * totalDurationSeconds;
+}
 //Event Listeners
 prevBtn.addEventListener('click',prevSong);
 nextBtn.addEventListener('click',nextSong);
 music.addEventListener('timeupdate', updateProgressBar);
+progressContainer.addEventListener('click',setProgressBar);
